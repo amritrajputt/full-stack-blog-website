@@ -4,8 +4,11 @@ app.use(express.json())
 const { z } = require('zod')
 const { Router } = require('express')
 const userRouter = Router()
-const { userModel } = require('../config/db')
+const { userModel, blogModel } = require('../config/db')
+const { JWT_USER_PASSWORD } = require('../config/config')
 const bcrypt = require('bcrypt')
+const userMiddleware = require('../middleware/user')
+const jwt = require('jsonwebtoken')
 
 userRouter.post('/signup', async (req, res) => {
 
@@ -33,7 +36,7 @@ userRouter.post('/signup', async (req, res) => {
     if (!parsedData.success) {
         res.json({
             message: "Incorrect format",
-            error:  parsedData.error.issues
+            error: parsedData.error.issues
         })
         return
     }
@@ -44,6 +47,12 @@ userRouter.post('/signup', async (req, res) => {
         if (checkUserExist) {
             return res.status(400).json({
                 message: "User already exists"
+            })
+        }
+        const checkUsernameAvailable = await userModel.findOne({ username })
+        if (checkUsernameAvailable) {
+            return res.status(400).json({
+                message: "Username not available"
             })
         }
         const hashedPassword = await bcrypt.hash(password, 10)
@@ -59,10 +68,45 @@ userRouter.post('/signup', async (req, res) => {
     }
 })
 
-userRouter.post('/signin', (req, res) => {
-
+userRouter.post('/signin', async (req, res) => {
+    const { username, email, password } = req.body
+    const user = await userModel.findOne({
+        $or: [{ email }, { username }]
+    })
+    if (!user) {
+        res.status(403).json({
+            message: "User doesn't exist in our DB"
+        })
+        return
+    }
+    const checkPassword = await bcrypt.compare(password, user.password)
+    if (checkPassword) {
+        const token = jwt.sign({
+            id: user._id
+        }, JWT_USER_PASSWORD)
+        res.json({
+            token: token
+        })
+    } else {
+        res.status(403).json({
+            message: "Incorrect credentials"
+        })
+    }
 })
 
-app.get('blogs', (req, res) => {
+userRouter.get('blogs', userMiddleware, async (req, res) => {
+    const userId = req.userId
+    const myBlogs = await blogModel.find({
+        userId
+    })
 
+   
+    res.json({
+        message: "Purchased courses",
+        blogs:myBlogs
+    })
 })
+
+module.exports = {
+    userRouter: userRouter
+}
