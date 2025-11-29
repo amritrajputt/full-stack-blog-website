@@ -7,7 +7,7 @@ const userRouter = Router()
 const { userModel, blogModel } = require('../config/db')
 const { JWT_USER_PASSWORD } = require('../config/config')
 const bcrypt = require('bcrypt')
-const {userMiddleware} = require('../middleware/userMiddleware')
+const { userMiddleware } = require('../middleware/userMiddleware')
 const jwt = require('jsonwebtoken')
 
 userRouter.post('/signup', async (req, res) => {
@@ -100,10 +100,10 @@ userRouter.get('/myblogs', userMiddleware, async (req, res) => {
         userId
     })
 
-   
+
     res.json({
         message: "Purchased courses",
-        blogs:myBlogs
+        blogs: myBlogs
     })
 })
 
