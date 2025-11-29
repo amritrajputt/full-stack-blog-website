@@ -5,9 +5,10 @@ require('dotenv').config()
 const mongoose = require('mongoose')
 
 const { userRouter } = require('./routes/user')
-
+const { blogRouter } = require('./routes/blog')
 
 app.use('/api/v1/user', userRouter)
+app.use('/api/v1/blog', blogRouter)
 
 const main = async() =>{
     try {
