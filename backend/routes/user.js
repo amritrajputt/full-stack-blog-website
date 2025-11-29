@@ -7,7 +7,7 @@ const userRouter = Router()
 const { userModel, blogModel } = require('../config/db')
 const { JWT_USER_PASSWORD } = require('../config/config')
 const bcrypt = require('bcrypt')
-const userMiddleware = require('../middleware/user')
+const {userMiddleware} = require('../middleware/userMiddleware')
 const jwt = require('jsonwebtoken')
 
 userRouter.post('/signup', async (req, res) => {
@@ -94,7 +94,7 @@ userRouter.post('/signin', async (req, res) => {
     }
 })
 
-userRouter.get('blogs', userMiddleware, async (req, res) => {
+userRouter.get('/myblogs', userMiddleware, async (req, res) => {
     const userId = req.userId
     const myBlogs = await blogModel.find({
         userId
