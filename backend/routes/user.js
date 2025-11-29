@@ -100,7 +100,6 @@ userRouter.get('/myblogs', userMiddleware, async (req, res) => {
         userId
     })
 
-
     res.json({
         message: "Purchased courses",
         blogs: myBlogs

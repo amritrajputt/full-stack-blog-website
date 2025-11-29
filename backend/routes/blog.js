@@ -97,6 +97,15 @@ blogRouter.patch('/updatetodo/:id', userMiddleware, async (req, res) => {
     }
 });
 
+blogRouter.get('/all' , async(req,res) => {
+    try {
+        const blogs = await blogModel.find().populate("userId","username pfp")
+        res.json({blogs})
+    } catch (error) {
+    res.status(500).json({message: "Server error", error: error.message })        
+    }
+})
+
 module.exports = {
     blogRouter: blogRouter
 };
