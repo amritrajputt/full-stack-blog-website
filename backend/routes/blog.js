@@ -34,7 +34,7 @@ blogRouter.post('/addblog', userMiddleware, async (req, res) => {
 });
 
 // Delete blog
-blogRouter.delete('/deletetodo/:id', userMiddleware, async (req, res) => {
+blogRouter.delete('/deleteblog/:id', userMiddleware, async (req, res) => {
     const userId = req.userId;
     const blogId = req.params.id;
 
@@ -58,7 +58,7 @@ blogRouter.delete('/deletetodo/:id', userMiddleware, async (req, res) => {
 });
 
 // Update blog
-blogRouter.patch('/updatetodo/:id', userMiddleware, async (req, res) => {
+blogRouter.patch('/updateblog/:id', userMiddleware, async (req, res) => {
     const userId = req.userId;
     const blogId = req.params.id;
     const { title, description, pictures, hashtags, links } = req.body
