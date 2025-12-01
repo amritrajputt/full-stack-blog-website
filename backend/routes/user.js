@@ -105,6 +105,20 @@ userRouter.get('/myblogs', userMiddleware, async (req, res) => {
         blogs: myBlogs
     })
 })
+userRouter.get('/getblogbyid/:id',userMiddleware,async(req,res ) => {
+    const id = req.params.id
+    if(!id){
+        res.status(403).json({
+            message:"id not provided";
+        })
+    }
+    const blog = await blogModel.findOne('id',({
+        res.json({
+            message:
+            blog
+        })
+    }))
+})
 
 module.exports = {
     userRouter: userRouter
