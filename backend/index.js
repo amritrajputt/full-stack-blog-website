@@ -10,10 +10,11 @@ const { reportRouter } = require('./routes/report')
 app.use('/api/v1/user', userRouter)
 app.use('/api/v1/blog', blogRouter)
 app.use('/api/v1/report', reportRouter)
+
 const main = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI)
-        console.log("DB is connected");
+        console.log("MONGODB is connected");
     } catch (error) {
         console.log("Failed to connect to the database", error)
     }
