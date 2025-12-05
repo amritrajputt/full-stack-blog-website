@@ -4,6 +4,15 @@ app.use(express.json())
 require('dotenv').config()
 const mongoose = require('mongoose')
 
+const cors = require("cors");
+app.use(cors())
+app.use(cors({
+  origin: "http://localhost:5173",
+  methods: ["GET", "POST", "PUT", "DELETE","PATCH"],
+  credentials: true
+}));
+
+
 const { userRouter } = require('./routes/user')
 const { blogRouter } = require('./routes/blog')
 const { reportRouter } = require('./routes/report')
